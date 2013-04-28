@@ -238,6 +238,7 @@ class WinOrderBook(Win):
         onChanged callback of the gox.orderbook instance"""
         self.gox = gox
         gox.orderbook.signal_changed.connect(self.slot_changed)
+        self.group = self.gox.config.get_float("goxtool", "orderbook_group")
         Win.__init__(self, stdscr)
 
     def calc_size(self):
@@ -265,8 +266,7 @@ class WinOrderBook(Win):
         col_own = COLOR_PAIR["book_own"]
 
         sum_total = self.gox.config.get_bool("goxtool", "orderbook_sum_total")
-        group = self.gox.config.get_float("goxtool", "orderbook_group")
-        group = goxapi.float2int(group, self.gox.currency)
+        group = goxapi.float2int(self.group, self.gox.currency)
         if group == 0:
             group = 1
 
@@ -1056,6 +1056,16 @@ def main():
                     DlgNewOrderAsk(stdscr, gox).modal()
                 if key == curses.KEY_F6:
                     DlgCancelOrders(stdscr, gox).modal()
+                if key == ord("+"):
+                    bookwin.group += 1
+                    bookwin.paint()
+                if key == ord("-"):
+                    if bookwin.group >= 1:
+                        bookwin.group -= 1
+                        bookwin.paint()
+                    else:
+                        bookwin.group = 0
+                        bookwin.paint()
                 if key == curses.KEY_RESIZE:
                     # pylint: disable=W0212
                     with goxapi.Signal._lock:
