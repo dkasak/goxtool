@@ -1050,23 +1050,23 @@ def main():
                 key = conwin.win.getch()
                 if key == ord("q"):
                     break
-                if key == curses.KEY_F4:
+                elif key == curses.KEY_F4:
                     DlgNewOrderBid(stdscr, gox).modal()
-                if key == curses.KEY_F5:
+                elif key == curses.KEY_F5:
                     DlgNewOrderAsk(stdscr, gox).modal()
-                if key == curses.KEY_F6:
+                elif key == curses.KEY_F6:
                     DlgCancelOrders(stdscr, gox).modal()
-                if key == ord("+"):
+                elif key == ord("+"):
                     bookwin.group += 1
                     bookwin.paint()
-                if key == ord("-"):
+                elif key == ord("-"):
                     if bookwin.group >= 1:
                         bookwin.group -= 1
                         bookwin.paint()
                     else:
                         bookwin.group = 0
                         bookwin.paint()
-                if key == curses.KEY_RESIZE:
+                elif key == curses.KEY_RESIZE:
                     # pylint: disable=W0212
                     with goxapi.Signal._lock:
                         stdscr.erase()
@@ -1076,10 +1076,10 @@ def main():
                         chartwin.resize()
                         statuswin.resize()
                     continue
-                if key == ord("l"):
+                elif key == ord("l"):
                     strategy_manager.reload()
                     continue
-                if key > ord("a") and key < ord("z"):
+                elif key > ord("a") and key < ord("z"):
                     gox.signal_keypress(gox, (key))
 
         except KeyboardInterrupt:
